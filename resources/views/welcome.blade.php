@@ -1,33 +1,22 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends("layouts.app")
 
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Page Analyzer</h1>
-        <p>Check web pages for free</p>
-        <form action="/domains" method="post">
-            {{ csrf_field() }}
-            <input type="text" name="domain[name]" value="" placeholder="https://www.example.com">
-            <button type="submit">Check</button>
-        </form>
-    </body>
-</html>
+@section('main')
+    <main class="flex-grow-1">
+        <div class="jumbotron jumbotron-fluid bg-dark">
+            <div class="container-lg">
+                <div class="row">
+                    <div class="col-12 col-md-10 col-lg-8 mx-auto text-white">
+                        <h1 class="display-3">Page Analyzer</h1>
+                        <p class="lead">Check web pages for free</p>
+                        <form action="{{route('store')}}" method="post" class="d-flex justify-content-center">
+                            {{ csrf_field() }}
+                            <input type="text" name="domain[name]" value="" class="form-control form-control-lg"
+                                   placeholder="https://www.example.com">
+                            <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">Check</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection
