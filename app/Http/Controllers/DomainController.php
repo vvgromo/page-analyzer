@@ -17,7 +17,7 @@ class DomainController extends Controller
     public function index()
     {
         $domains = DB::table('domains')->get()->toArray();
-        return view('domains.domains', ['domains' => $domains]);
+        return view('domains.index', ['domains' => $domains]);
     }
 
     /**
@@ -73,11 +73,11 @@ class DomainController extends Controller
      */
     public function show($id)
     {
-        $domain = DB::table('domains')->where('id', $id)->first() ?? null;
+        $domain = DB::table('domains')->where('id', $id)->first();
         if (!$domain) {
             return abort(404);
         }
-        return view('domains.domain', ['domain' => $domain]);
+        return view('domains.show', ['domain' => $domain]);
     }
 
     /**
