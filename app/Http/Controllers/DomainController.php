@@ -45,7 +45,7 @@ class DomainController extends Controller
         }
         $queryDomain = $request->get('domain');
         $parsedDomain = parse_url($queryDomain['name']);
-        $domainName = mb_strtolower("{$parsedDomain['scheme']}://{$parsedDomain['host']}");
+        $domainName = mb_strtolower(join("://", [$parsedDomain["scheme"], $parsedDomain["host"]]));
         $hasDomain = DB::table('domains')
             ->where('name', $domainName)
             ->exists();
