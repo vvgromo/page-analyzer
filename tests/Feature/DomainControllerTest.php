@@ -18,13 +18,13 @@ class DomainControllerTest extends TestCase
     {
         parent::setUp();
 
-        $domain = $this->faker->url;
-        $parsedDomain = parse_url($domain);
-        DB::table('domains')->insert([
-            'name' => join("://", [$parsedDomain['scheme'], $parsedDomain['host']]),
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+//        $domain = $this->faker->url;
+//        $parsedDomain = parse_url($domain);
+//        DB::table('domains')->insert([
+//            'name' => join("://", [$parsedDomain['scheme'], $parsedDomain['host']]),
+//            'created_at' => now(),
+//            'updated_at' => now()
+//        ]);
     }
 
     public function testIndex()
@@ -43,6 +43,9 @@ class DomainControllerTest extends TestCase
     {
         $domain = $this->faker->url;
         $response = $this->post(route('store'), ['domain[name]' => $domain]);
+        $response->assertSessionHasNoErrors();
+        $response->assertStatus(302);
+        $response->assertRedirect();
         $parsedDomain = parse_url($domain);
         $this->assertDatabaseHas('domains', [
             'name' => join("://", [$parsedDomain['scheme'], $parsedDomain['host']])
