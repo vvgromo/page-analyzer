@@ -43,5 +43,9 @@ class DomainControllerTest extends TestCase
     {
         $domain = $this->faker->url;
         $response = $this->post(route('store'), ['domain[name]' => $domain]);
+        $parsedDomain = parse_url($domain);
+        $this->assertDatabaseHas('domains', [
+            'name' => join("://", [$parsedDomain['scheme'], $parsedDomain['host']])
+        ]);
     }
 }
