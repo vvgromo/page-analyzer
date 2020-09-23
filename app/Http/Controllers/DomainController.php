@@ -16,7 +16,24 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = DB::table('domains')->get()->toArray();
+        $domains = DB::table('domains')->get();
+        $lastChecks = DB::table('domain_checks')
+            ->select('created_at', 'domain_id')
+            ->orderByDesc('created_at')
+            //->distinct('domain_id')
+            ->get();
+//            ->select(DB::raw('domain_id, max(created_at) as last_check'))
+//            ->groupBy('domain_id')
+//            ->get()
+//            ->keyBy('domain_id');
+        dump($lastChecks);
+//        $domainsView = $domains->map(function ($domain) use ($lastChecks) {
+//            return [
+//               'id' => $domain->id,
+//               'name' => $domain->name,
+//               'last_check' =>
+//           ]
+//        });
         return view('domains.index', ['domains' => $domains]);
     }
 
@@ -77,40 +94,11 @@ class DomainController extends Controller
         if (!$domain) {
             return abort(404);
         }
-        return view('domains.show', ['domain' => $domain]);
-    }
+        $domainChecks = DB::table('domain_checks')
+            ->where('domain_id', $id)
+            ->orderByDesc('id')
+            ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('domains.show', ['domain' => $domain, 'domainChecks' => $domainChecks]);
     }
 }
