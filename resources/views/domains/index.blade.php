@@ -14,9 +14,9 @@
                     </tr>
                     @foreach($domains as $domain)
                         <tr>
-                            <td>{{$domain->id}}</td>
-                            <td><a href="{{route('show', ['id' => $domain->id])}}">{{$domain->name}}</a></td>
-                            <td></td>
+                            <td>{{$domain['id']}}</td>
+                            <td><a href="{{route('show', ['id' => $domain['id']])}}">{{$domain['name']}}</a></td>
+                            <td>{{$domain['last_check']}}</td>
                             <td></td>
                         </tr>
                     @endforeach

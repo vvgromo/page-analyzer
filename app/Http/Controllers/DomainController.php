@@ -18,23 +18,20 @@ class DomainController extends Controller
     {
         $domains = DB::table('domains')->get();
         $lastChecks = DB::table('domain_checks')
-            ->select('created_at', 'domain_id')
+            ->distinct('domain_id')
+            ->select('domain_id', 'created_at')
+            ->orderBy('domain_id')
             ->orderByDesc('created_at')
-            //->distinct('domain_id')
-            ->get();
-//            ->select(DB::raw('domain_id, max(created_at) as last_check'))
-//            ->groupBy('domain_id')
-//            ->get()
-//            ->keyBy('domain_id');
-        dump($lastChecks);
-//        $domainsView = $domains->map(function ($domain) use ($lastChecks) {
-//            return [
-//               'id' => $domain->id,
-//               'name' => $domain->name,
-//               'last_check' =>
-//           ]
-//        });
-        return view('domains.index', ['domains' => $domains]);
+            ->get()
+            ->keyBy('domain_id');
+        $domainsView = $domains->map(function ($domain) use ($lastChecks) {
+            return [
+               'id' => $domain->id,
+               'name' => $domain->name,
+               'last_check' => $lastChecks[$domain->id]->created_at ?? null
+            ];
+        });
+        return view('domains.index', ['domains' => $domainsView]);
     }
 
     /**
