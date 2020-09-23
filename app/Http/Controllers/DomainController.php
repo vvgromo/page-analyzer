@@ -38,13 +38,13 @@ class DomainController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['domain.name' => 'required|url']);
+        $validator = Validator::make($request->all(), ['domain' => 'required|url']);
         if ($validator->fails()) {
             flash('Not a valid url')->error();
             return redirect()->route('create');
         }
-        $queryDomain = $request->get('domain');
-        $parsedDomain = parse_url($queryDomain['name']);
+        $domain = $request->get('domain');
+        $parsedDomain = parse_url($domain);
         $domainName = mb_strtolower(join("://", [$parsedDomain["scheme"], $parsedDomain["host"]]));
         $hasDomain = DB::table('domains')
             ->where('name', $domainName)
